@@ -12,7 +12,6 @@ const App = (): JSX.Element => {
 	const actions: MainActions = useAppActions()
 	const { product } = useAppSelector((state: RootState) => state)
 	useEffect(() => {
-		console.log("making the request")
 		actions.product.get.product(1)
 			.then((data: any) => console.log("product ", data))
 			.catch((err: any) => console.log(err))
