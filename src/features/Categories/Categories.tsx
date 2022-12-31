@@ -13,7 +13,6 @@ import { EditCategoryForm } from "./table/modalContents/EditCategoryForm"
 const useStyles: () => ClassNameMap<any> = makeStyles((_theme: Theme) => ({
 	container: {
 		backgroundColor: "green",
-		/* marginLeft: 0 */
 	},
 	catGrid: {
 		backgroundColor: "red",
