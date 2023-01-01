@@ -9,6 +9,7 @@ import { Column } from "../../shared/utils/types"
 import { categoriesCellActions } from "./table/renderCategoriesCellActions"
 import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { EditCategoryForm } from "./table/modalContents/EditCategoryForm"
+import * as _ from "lodash"
 
 const useStyles: () => ClassNameMap<any> = makeStyles((_theme: Theme) => ({
 	container: {
@@ -79,6 +80,7 @@ export const Categories = () => {
         headerAction={headerAction}
         searchCriteria={searchCriteria}
         updateCriteria={actions.category.edit.criteria}
+        debouncedUpdateCriteria={_.debounce(actions.category.edit.criteria, 500)}
       />
 		</Grid>
 	</Grid>

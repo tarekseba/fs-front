@@ -25,16 +25,16 @@ export const renderProductsCellActions = (actions: any = undefined) => (row: Pro
 const ProductsCellActions = ({ product: item }: { product: Product }) => {
   const { toggleModal } = useModal()
   const { product, store, category }: MainActions = useAppActions()
-  const { stores }: StoreState = useAppSelector((state: RootState) => state.store)
-  const { categories }: CategoryState = useAppSelector((state: RootState) => state.category)
+  const { stores, searchCriteria }: StoreState = useAppSelector((state: RootState) => state.store)
+  const { categories, searchCriteria: categoriesCriteria }: CategoryState = useAppSelector((state: RootState) => state.category)
   const { setDynamicProps }: ModalOptions = useModal()
 
   const onSearchStores = (text: string) => {
-    store.get.stores()
+    store.edit.criteria({...searchCriteria, name: text, description: text})
   }
 
   const onSearchCategories = (text: string) => {
-    category.get.categories(defaultSearchCriteria)
+    category.edit.criteria({ ...categoriesCriteria, name: text })
   }
 
   useEffect(() => {

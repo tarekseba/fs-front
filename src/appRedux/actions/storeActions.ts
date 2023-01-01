@@ -5,7 +5,7 @@ import { SearchCriteria } from "../../utils/types"
 export const storeActions = {
   get: {
     store: (id: number): any => get("GET_STORE", `/store/${id}`),
-    stores: (): any => get("GET_STORES", "/store")
+    stores: (searchCriteria: SearchCriteria): any => get("GET_STORES", "/store", searchCriteria)
   },
   create: {
     store: (store: StoreCreation): any => post("CREATE_STORE", "/store", store)

@@ -1,4 +1,4 @@
-import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit"
+import { ActionReducerMapBuilder, createSlice, current } from "@reduxjs/toolkit"
 import { actionTypes } from "../../core"
 import { ApiPaginatedSearchResult, ApiSearchResult, defaultSearchCriteria, SearchCriteria } from "../../utils/types"
 import { storeActions } from "../actions/storeActions"
@@ -50,14 +50,15 @@ const storeSlice = createSlice({
         return {...state, stores: action.payload}
       })
       .addCase(actionTypes("CREATE_STORE").success, (state: StoreState, action: AppPayloadAction<any>) => {
-        action.asyncDispatch(storeActions.get.stores())
+        action.asyncDispatch(storeActions.get.stores(current(state.searchCriteria)))
         return state
       })
       .addCase(actionTypes("EDIT_STORE").success, (state: StoreState, action: AppPayloadAction<any>) => {
-        action.asyncDispatch(storeActions.get.stores())
+        action.asyncDispatch(storeActions.get.stores(current(state.searchCriteria)))
         return state
       })
       .addCase("UPDATE_STORE_CRITERIA" as string, (state: StoreState, action: AppPayloadAction<SearchCriteria>) => {
+        action.asyncDispatch(storeActions.get.stores({ ...action.payload }))
         return { ...state, searchCriteria: { ...action.payload } }
       })
 	}

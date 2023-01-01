@@ -1,5 +1,5 @@
-import React from "react"
-import { Box, Button, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Theme, Tooltip } from "@mui/material"
+import React, { ChangeEvent, FormEvent, SyntheticEvent } from "react"
+import { Box, Button, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, TextField, Theme, Tooltip } from "@mui/material"
 import { ClassNameMap, makeStyles } from "@mui/styles"
 import { ApiPaginatedSearchResult, OrderType, SearchCriteria } from "../utils/types"
 import { Column } from "./utils/types"
@@ -40,10 +40,20 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
       verticalAlign: "top"
     }
 	},
-  topHeader: {
+  topHeaderAction: {
     marginTop: ".5rem",
     marginLeft: "1rem",
     minHeight: "3rem"
+  },
+  topHeaderSearch: {
+    marginLeft: "auto",
+    marginRight: "1rem"
+  },
+  actionHeader: {
+    minHeight: "5rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   }
 }))
 
@@ -57,8 +67,9 @@ interface DatatableProps<T> {
   headerAction?: () => void
   searchCriteria: SearchCriteria
   updateCriteria: (criteria: SearchCriteria) => any
+  debouncedUpdateCriteria?: (criteria: SearchCriteria) => any
 }
-export const Datatable = <T extends object>({ columns, data, loading = false, cellActions, headerAction, searchCriteria, updateCriteria }: DatatableProps<T>): JSX.Element => {
+export const Datatable = <T extends object>({ columns, data, loading = false, cellActions, headerAction, searchCriteria, updateCriteria, debouncedUpdateCriteria }: DatatableProps<T>): JSX.Element => {
 	const classes = useStyles()
 
 
@@ -72,10 +83,17 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
     return updateCriteria({...searchCriteria, by: field_name, order: toggleOrder(searchCriteria?.order as OrderType)}) 
   } 
 
+  const onGlobalSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    debouncedUpdateCriteria && debouncedUpdateCriteria({ ...searchCriteria, name: event.currentTarget.value, description: event.currentTarget.value })
+  }
+
 	return <div className={classes.root}>
 		{loading && <LinearProgress className={classes.progress} />}
 		<TableContainer component={Paper}>
-      <div className={classes.topHeader}>{headerAction && <Button variant="contained" onClick={headerAction}>ADD</Button>}</div>
+      <div className={classes.actionHeader}>
+        <div className={classes.topHeaderAction}>{headerAction && <Button variant="contained" onClick={headerAction}>ADD</Button>}</div>
+        <TextField className={classes.topHeaderSearch} placeholder={"Global search"} onChange={onGlobalSearchChange}/>
+      </div>
 			<Table
 				sx={{ minWidth: 750 }}
 				aria-labelledby="tableTitle"

@@ -9,6 +9,7 @@ import { EditProductForm } from "./table/modalContents/EditProductForm"
 import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { renderProductsCellActions } from "./table/renderProductsCellActions"
 import EuroSymbolRoundedIcon from "@mui/icons-material/EuroSymbolRounded"
+import * as _ from "lodash"
 
 const priceFormatter = (row: Product) => (
   <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", color: "#1976d2"}}>
@@ -54,6 +55,7 @@ export const Products = () => {
         headerAction={headerAction}
         searchCriteria={searchCriteria}
         updateCriteria={actions.product.edit.criteria}
+        debouncedUpdateCriteria={_.debounce(actions.product.edit.criteria, 500)}
       />
 		</Grid>
     </Grid>

@@ -9,6 +9,7 @@ import { renderStoresCellActions, StoreCreation } from "./table/renderStoresCell
 import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { StoreCreationForm } from "./table/modalContents/StoreCreationForm"
 import { defaultSearchCriteria } from "../../utils/types"
+import * as _ from "lodash"
 
 /* eslint-disable-next-line */
 const statusFormatter = (store: Store): ReactNode => {
@@ -53,7 +54,7 @@ export const Stores = (): JSX.Element => {
   }
 
   useEffect(() => {
-    actions.store.get.stores() 
+    actions.store.get.stores(defaultSearchCriteria) 
   }, [])
 
   return (<Grid container justifyContent={"space-between"} style={{padding: "1rem"}}>
@@ -67,6 +68,7 @@ export const Stores = (): JSX.Element => {
         headerAction={headerAction}
         searchCriteria={defaultSearchCriteria}
         updateCriteria={actions.store.edit.criteria}
+        debouncedUpdateCriteria={_.debounce(actions.store.edit.criteria, 500)}
       />
     </Grid>
     </Grid>

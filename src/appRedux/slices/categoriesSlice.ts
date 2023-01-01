@@ -56,7 +56,7 @@ const categorySlice = createSlice({
         return state
       })
       .addCase("UPDATE_CATEGORY_CRITERIA" as string, (state: CategoryState, action: AppPayloadAction<SearchCriteria>) => {
-        action.asyncDispatch(categoryActions.get.categories(current(state.searchCriteria)))
+        action.asyncDispatch(categoryActions.get.categories({ ...action.payload }))
         return { ...state, searchCriteria: { ...action.payload } }
       })
 	}
