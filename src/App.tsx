@@ -10,15 +10,8 @@ import { ModalProvider } from "./shared/Modal/ModalProvider"
 
 const App = (): JSX.Element => {
 	const actions: MainActions = useAppActions()
+
 	const { product } = useAppSelector((state: RootState) => state)
-	useEffect(() => {
-		actions.product.get.product(1)
-			.then((data: any) => console.log("product ", data))
-			.catch((err: any) => console.log(err))
-		actions.category.get.categories(defaultSearchCriteria)
-			.then((data: any) => console.log("category ", data))
-			.catch((err: any) => console.log(err))
-	}, [])
 	return (
 		<>
       <ModalProvider>
