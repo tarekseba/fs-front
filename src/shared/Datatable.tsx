@@ -1,9 +1,11 @@
-import React, { ChangeEvent, FormEvent, SyntheticEvent } from "react"
-import { Box, Button, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, TextField, Theme, Tooltip } from "@mui/material"
+import React, { ChangeEvent } from "react"
+import { Button, LinearProgress, MenuItem, Pagination, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, TextField, Theme, Tooltip } from "@mui/material"
 import { ClassNameMap, makeStyles } from "@mui/styles"
 import { ApiPaginatedSearchResult, OrderType, SearchCriteria } from "../utils/types"
 import { Column } from "./utils/types"
 import * as _ from "lodash"
+
+const per_page_options: number[] = [5, 10, 20, 30, 40, 50]
 
 const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
 	root : {
@@ -47,13 +49,25 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
   },
   topHeaderSearch: {
     marginLeft: "auto",
-    marginRight: "1rem"
+    marginRight: "1rem",
+    "& > .MuiInputBase-root": {
+      height: "2.5rem"
+    }
   },
   actionHeader: {
     minHeight: "5rem",
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
+  },
+  tableFooter: {
+    paddingTop: ".4rem",
+    paddingBottom: ".4rem",
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: "1rem",
+    paddingRight: "2rem"
   }
 }))
 
@@ -86,6 +100,17 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
   const onGlobalSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     debouncedUpdateCriteria && debouncedUpdateCriteria({ ...searchCriteria, name: event.currentTarget.value, description: event.currentTarget.value })
   }
+
+  const onPaginationChange = (_event: ChangeEvent<unknown>, page: number) => {
+    updateCriteria({ ...searchCriteria, page }) 
+  }
+
+  const onPerPageChange  = (event: SelectChangeEvent<number>) => {
+    updateCriteria({ ...searchCriteria, per_page: event.target.value as number }) 
+  }
+
+  if(data?.result)
+    console.log(new Date((data.result[0] as any).created_at).toLocaleString().replace(",", " "))
 
 	return <div className={classes.root}>
 		{loading && <LinearProgress className={classes.progress} />}
@@ -131,6 +156,12 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 					))}
 				</TableBody>
 			</Table>
+      <div className={classes.tableFooter}>
+        <Pagination variant="text" shape="rounded" page={searchCriteria?.page || 1} count={data?.total_pages || 0} onChange={onPaginationChange} />
+        <Select defaultValue={searchCriteria?.per_page || 10} style={{height: "2rem"}} onChange={onPerPageChange}>
+          {per_page_options.map((value: number) => <MenuItem key={value} value={value}>{value}</MenuItem>)}
+        </Select>
+      </div>
 		</TableContainer>
 	</div>
 }

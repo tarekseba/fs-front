@@ -19,7 +19,7 @@ export interface Product {
   price: number
   description?: string
   categories?: Category[]
-  created_at: string
+  created_at: Date
 }
 
 const initialState: ProductState = {

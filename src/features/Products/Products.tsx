@@ -17,13 +17,17 @@ const priceFormatter = (row: Product) => (
   </div>
 )
 
+const dateFormatter = (row: Product) => (
+  new Date(row.created_at).toLocaleString().replace(",", " -")
+)
+
 const columns_temp: Column<Product>[] = [
 	/* { label: "Id", field_name: "id", can_sort:  }, */
 	{ label: "Nom", field_name: "name", can_sort: true },
   { label: "Price", field_name: "price", can_sort: true, formatter: priceFormatter },
   { label: "description", field_name: "description", can_sort: true },
   { label: "Store", field_name: "store_id", can_sort: false },
-	{ label: "Date de creation", field_name: "created_at", can_sort: true }
+	{ label: "Date de creation", field_name: "created_at", can_sort: true, formatter: dateFormatter }
 ]
 
 export const Products = () => {

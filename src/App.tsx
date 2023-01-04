@@ -5,7 +5,6 @@ import { MainActions } from "./appRedux/types"
 import { RootState } from "./appRedux/store"
 import { BrowserRouter as Router } from "react-router-dom"
 import { Layout } from "./layout/Layout"
-import { defaultSearchCriteria } from "./utils/types"
 import { ModalProvider } from "./shared/Modal/ModalProvider"
 
 const App = (): JSX.Element => {

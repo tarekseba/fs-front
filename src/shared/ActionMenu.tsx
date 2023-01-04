@@ -18,29 +18,11 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
 }))
 
 export interface ActionMenuProps {
-  /**
-   * Actions displayed in the menu
-   */
   actions: Array<IAction>
-  /**
-   * Label of the open menu button
-   */
   actionLabel?: string
-  /**
-   * Icon of the open menu button
-   */
   icon?: ReactNode
-  /**
-   * Style of the open menu button
-   */
   variant?: ButtonProps["variant"]
-  /**
-   * Color of the open menu button
-   */
   color?: ButtonProps["color"]
-  /**
-   * if `true` loading progress will be displayed
-   */
   loading?: boolean
 }
 
@@ -80,6 +62,7 @@ export const ActionMenu = (props: ActionMenuProps): JSX.Element => {
 				onClick={handleToggle}
 				disabled={loading}
 				endIcon={icon}
+        style={{height: "1.7rem"}}
 			>
 				{actionLabel}
 			</Button>
