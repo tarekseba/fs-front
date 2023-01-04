@@ -58,6 +58,7 @@ const storeSlice = createSlice({
         return state
       })
       .addCase("UPDATE_STORE_CRITERIA" as string, (state: StoreState, action: AppPayloadAction<SearchCriteria>) => {
+        console.log("Update store criteria")
         action.asyncDispatch(storeActions.get.stores({ ...action.payload }))
         return { ...state, searchCriteria: { ...action.payload } }
       })

@@ -40,7 +40,7 @@ const defaultInitialValues: StoreCreation = {
 
 export const Stores = (): JSX.Element => {
   const actions = useAppActions()
-  const { stores } = useAppSelector((state: RootState) => state.store) 
+  const { stores, searchCriteria } = useAppSelector((state: RootState) => state.store) 
   const { toggleModal }: ModalOptions = useModal()
 
   const headerAction = () =>  {
@@ -54,7 +54,7 @@ export const Stores = (): JSX.Element => {
   }
 
   useEffect(() => {
-    actions.store.get.stores(defaultSearchCriteria) 
+    actions.store.get.stores(searchCriteria) 
   }, [])
 
   return (<Grid container justifyContent={"space-between"} style={{padding: "1rem"}}>
@@ -66,7 +66,7 @@ export const Stores = (): JSX.Element => {
         columns={columns_temp}
         cellActions={renderStoresCellActions()}
         headerAction={headerAction}
-        searchCriteria={defaultSearchCriteria}
+        searchCriteria={searchCriteria}
         updateCriteria={actions.store.edit.criteria}
         debouncedUpdateCriteria={_.debounce(actions.store.edit.criteria, 500)}
       />
