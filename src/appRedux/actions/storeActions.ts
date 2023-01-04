@@ -1,6 +1,7 @@
 import { get, post, put } from "../../core"
 import { StoreCreation, StoreEdition } from "../../features/Stores/table/renderStoresCellActions"
 import { SearchCriteria } from "../../utils/types"
+import { StoreCriteria } from "../slices/storeSlice"
 
 export const storeActions = {
   get: {
@@ -12,6 +13,6 @@ export const storeActions = {
   },
   edit: {
     store: (storeId: number, store: StoreEdition): any => put("EDIT_STORE", `/store/${storeId}`, store),
-    criteria: (criteria: SearchCriteria) => ({type: "UPDATE_STORE_CRITERIA", payload: criteria})
+    criteria: (criteria: StoreCriteria) => ({type: "UPDATE_STORE_CRITERIA", payload: criteria})
   }
 }

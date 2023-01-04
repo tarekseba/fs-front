@@ -20,7 +20,6 @@ export interface SearchCriteria extends Record<string, any> {
   page?: number
   name?: string
   description?: string
-  in_holiday?: boolean
 }
 
 export const defaultSearchCriteria: SearchCriteria = {
@@ -30,7 +29,6 @@ export const defaultSearchCriteria: SearchCriteria = {
 	page: 1,
   name: "",
   description: "",
-  in_holiday: undefined
 }
 
 export interface IObject<T = any> { [key: string]: T }

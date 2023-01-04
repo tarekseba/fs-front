@@ -1,5 +1,5 @@
-import React, { ReactNode, useEffect } from "react"
-import { Grid, Paper, Typography } from "@mui/material"
+import React, { ReactNode, useEffect, useState } from "react"
+import { FormControlLabel, Grid, Paper, Radio, Typography } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { Store } from "../../appRedux/slices/storeSlice"
 import { RootState } from "../../appRedux/store"
@@ -8,7 +8,7 @@ import { Column } from "../../shared/utils/types"
 import { renderStoresCellActions, StoreCreation } from "./table/renderStoresCellActions"
 import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { StoreCreationForm } from "./table/modalContents/StoreCreationForm"
-import { defaultSearchCriteria } from "../../utils/types"
+import { defaultSearchCriteria, ReactState } from "../../utils/types"
 import * as _ from "lodash"
 
 /* eslint-disable-next-line */
@@ -42,6 +42,7 @@ export const Stores = (): JSX.Element => {
   const actions = useAppActions()
   const { stores, searchCriteria } = useAppSelector((state: RootState) => state.store) 
   const { toggleModal }: ModalOptions = useModal()
+  const [ open, setOpen ]: ReactState<boolean> = useState(false)
 
   const headerAction = () =>  {
     toggleModal({
@@ -52,13 +53,21 @@ export const Stores = (): JSX.Element => {
         />
     })
   }
+  const onIsOpenChange = () => {
+    actions.store.edit.criteria({...searchCriteria, in_holiday: open ? undefined : false })
+    setOpen((state: boolean) => !state)
+  }
 
   useEffect(() => {
     actions.store.get.stores(searchCriteria) 
   }, [])
 
   return (<Grid container justifyContent={"space-between"} style={{padding: "1rem"}}>
-    <Grid item sm={4}  md={3.5}><Paper style={{marginRight: ".5rem"}}>1</Paper></Grid>
+    <Grid item sm={4}  md={3.5}>
+      <Paper style={{marginRight: ".5rem"}}>
+        <FormControlLabel control={<input type={"checkbox"}/>} label={"Open"} value={searchCriteria.in_holiday} checked={open} onClick={onIsOpenChange}></FormControlLabel>
+      </Paper>
+    </Grid>
     <Grid item sm={8}  md={8.5} style={{backgroundColor: "yellow"}}>
       <Datatable<Store>
         loading={false}

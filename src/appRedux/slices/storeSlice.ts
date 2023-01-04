@@ -5,6 +5,10 @@ import { storeActions } from "../actions/storeActions"
 import { AppPayloadAction } from "../types"
 import { Product } from "./productSlice"
 
+export interface StoreCriteria extends SearchCriteria {
+  in_holiday?: boolean
+}
+
 export interface Worktime {
   id: number,
   store_id: number,
@@ -27,14 +31,14 @@ export interface Store {
 export interface StoreState {
   store?: Store
   stores?: ApiPaginatedSearchResult<Store>
-  searchCriteria: SearchCriteria
+  searchCriteria: StoreCriteria
   loading: boolean
 }
 
 const initialState: StoreState = {
 	store: undefined,
 	stores: undefined,
-  searchCriteria: defaultSearchCriteria,
+  searchCriteria: { ...defaultSearchCriteria, in_holiday: undefined },
 	loading: false
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Grid, Paper } from "@mui/material"
+import { FormControlLabel, Grid, Paper, Radio } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { Product } from "../../appRedux/slices/productSlice"
 import { RootState } from "../../appRedux/store"
@@ -49,7 +49,10 @@ export const Products = () => {
 	}, [])
 
 	return (<Grid container justifyContent={"space-between"} style={{padding: "1rem"}}>
-		<Grid item sm={4}  md={3.5}><Paper style={{marginRight: ".5rem"}}>1</Paper></Grid>
+		<Grid item sm={4}  md={3.5}><Paper style={{marginRight: ".5rem"}}>
+    </Paper>
+
+    </Grid>
 		<Grid item sm={8}  md={8.5} style={{backgroundColor: "yellow"}}>
 			<Datatable<Product>
         loading={false}
