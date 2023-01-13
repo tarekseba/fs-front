@@ -17,11 +17,15 @@ const statusFormatter = (store: Store): ReactNode => {
   return <Typography {...props}>{store.is_holiday ? "On holiday" : "Open"}</Typography>
 }
 
+const dateFormatter = (row: Store) => (
+  new Date(row.created_at).toLocaleString().replace(",", " -")
+)
+
 const columns_temp: Column<Store>[] = [
   { label: "Id", field_name: "id", can_sort: false },
   { label: "Nom", field_name: "name", can_sort: false },
   { label: "Status", field_name: "store_id", can_sort: true, formatter: statusFormatter },
-  { label: "Date de creation", field_name: "created_at", can_sort: false }
+  { label: "Date de creation", field_name: "created_at", can_sort: false, formatter: dateFormatter }
 ]
 
 const defaultInitialValues: StoreCreation = {

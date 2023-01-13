@@ -1,6 +1,5 @@
 import React, { useEffect } from "react"
-import { Grid, Paper, Theme } from "@mui/material"
-import { makeStyles, ClassNameMap } from "@mui/styles"
+import { Grid, Paper } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { Category } from "../../appRedux/slices/categoriesSlice"
 import { RootState } from "../../appRedux/store"
@@ -11,19 +10,9 @@ import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { EditCategoryForm } from "./table/modalContents/EditCategoryForm"
 import * as _ from "lodash"
 
-const useStyles: () => ClassNameMap<any> = makeStyles((_theme: Theme) => ({
-	container: {
-		backgroundColor: "green",
-	},
-	catGrid: {
-		backgroundColor: "red",
-		margin: "1rem"
-	},
-	filtersGrid: {
-		backgroundColor: "yellow",
-		margin: "1rem"
-	}
-}))
+const dateFormatter = (row: Category) => (
+  new Date(row.created_at).toLocaleString().replace(",", " -")
+)
 
 const columns_temp: Column<Category>[] = [
 	{
@@ -39,7 +28,8 @@ const columns_temp: Column<Category>[] = [
 	{
 		label: "Date de creation",
 		field_name: "created_at",
-		can_sort: false
+		can_sort: false,
+    formatter: dateFormatter
 	},
 ]
 
