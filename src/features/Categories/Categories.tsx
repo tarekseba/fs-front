@@ -18,17 +18,17 @@ const columns_temp: Column<Category>[] = [
 	{
 		label: "Id",
 		field_name: "id",
-		can_sort: false
+		can_sort: true
 	},
 	{
 		label: "Nom",
 		field_name: "name",
-		can_sort: false
+		can_sort: true
 	},
 	{
 		label: "Date de creation",
 		field_name: "created_at",
-		can_sort: false,
+		can_sort: true,
     formatter: dateFormatter
 	},
 ]

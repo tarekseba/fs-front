@@ -10,6 +10,22 @@ import Tooltip from "@mui/material/Tooltip"
 import AdbIcon from "@mui/icons-material/Adb"
 import LoginIcon from "@mui/icons-material/Login"
 import { useNavigate } from "react-router"
+import { Theme, useTheme } from "@mui/material"
+
+/* const useStyles: () => ClassNameMap<any> = makeStyles(() => ({ */
+/*   appbar: {  */
+/*     "&.MuiAppBar-root": { */
+/*       width: "90%", */
+/*       borderRadius: "50px", */
+/*       /* backgroundColor: "white", */
+/*       top: "1rem !important", */
+/*       left: 0, */
+/*       right: 0, */
+/*       margin: "auto", */
+/*       color: "black" */
+/*     } */
+/*   } */
+/* })) */
 
 const pages: Record<string, string>[] = [
 	{ name: "Stores", path: "/stores" }, 
@@ -20,14 +36,18 @@ const pages: Record<string, string>[] = [
 function Appbar() {
 	const navigate = useNavigate()
 
+  const theme: Theme = useTheme()
+
 	const navigateTo = (url: string) => () => {
 		navigate(url)
 	}
 
+  /* const styles: ClassNameMap<string> = useStyles() */
+
 	return (
 		<AppBar position="absolute">
 			<Container maxWidth="xl">
-				<Toolbar disableGutters>
+				<Toolbar disableGutters >
 					<AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
 					<Typography
 						variant="h6"
@@ -40,38 +60,18 @@ function Appbar() {
 							fontFamily: "monospace",
 							fontWeight: 700,
 							letterSpacing: ".3rem",
-							color: "inherit",
+							color: (theme: Theme) => theme.palette.grey[400],
 							textDecoration: "none",
 						}}
 					>
             STORE
-					</Typography>
-
-					<AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-					<Typography
-						variant="h5"
-						noWrap
-						component="a"
-						href=""
-						sx={{
-							mr: 2,
-							display: { xs: "flex", md: "none" },
-							flexGrow: 1,
-							fontFamily: "monospace",
-							fontWeight: 700,
-							letterSpacing: ".3rem",
-							color: "inherit",
-							textDecoration: "none",
-						}}
-					>
-            LOGO
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
 						{pages.map((page: Record<string, string>, index: number) => (
 							<Button
 								onClick={navigateTo(page.path)}
 								key={`${page.name}_${index}`}
-								sx={{ my: 2, color: "white", display: "block", fontWeight: 600 }}
+								sx={{ my: 2, display: "block", fontWeight: 600 }}
 							>
 								{page.name}
 							</Button>
@@ -80,8 +80,8 @@ function Appbar() {
 
 					<Box sx={{ flexGrow: 0 }}>
 						<Tooltip title="Login">
-							<IconButton sx={{ p: 0, color: "white" }}>
-								<LoginIcon></LoginIcon>
+							<IconButton sx={{ p: 0 }}>
+								<LoginIcon color="secondary"></LoginIcon>
 							</IconButton>
 						</Tooltip>
 					</Box>

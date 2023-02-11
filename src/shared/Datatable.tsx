@@ -3,6 +3,7 @@ import { Button, LinearProgress, MenuItem, Pagination, Paper, Select, SelectChan
 import { ClassNameMap, makeStyles } from "@mui/styles"
 import { ApiPaginatedSearchResult, OrderType, SearchCriteria } from "../utils/types"
 import { Column } from "./utils/types"
+import LanguageIcon from "@mui/icons-material/Language"
 import * as _ from "lodash"
 
 const per_page_options: number[] = [5, 10, 20, 30, 40, 50]
@@ -94,7 +95,11 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
     }
   }
   const handleSort = (field_name: string) => () => {
-    return updateCriteria({...searchCriteria, by: field_name, order: toggleOrder(searchCriteria?.order as OrderType)}) 
+    return updateCriteria({
+      ...searchCriteria,
+      by: field_name,
+      order: toggleOrder(searchCriteria?.order as OrderType)
+    }) 
   } 
 
   const onGlobalSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -108,9 +113,6 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
   const onPerPageChange  = (event: SelectChangeEvent<number>) => {
     updateCriteria({ ...searchCriteria, per_page: event.target.value as number }) 
   }
-
-  if(data?.result)
-    console.log(new Date((data.result[0] as any).created_at).toLocaleString().replace(",", " "))
 
 	return <div className={classes.root}>
 		{loading && <LinearProgress className={classes.progress} />}
@@ -130,11 +132,22 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 						{ columns?.map((col: Column<T>, index: number) => (
 							<TableCell align="center" key={`${col.label}_${index}`} style={{fontWeight: "bold"}}>
                 {col.can_sort ? (
-                  <Tooltip title={"Trier"} >
-                    <TableSortLabel active={col.field_name === searchCriteria?.by?.toLowerCase()} direction={searchCriteria?.order?.toLowerCase() as Order} onClick={handleSort(col.field_name as string)}>
-                      {col.label}
-                    </TableSortLabel>
-                  </Tooltip>
+                  <div style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+                    {col.i18n && 
+                      <Tooltip title="I18n">
+                        <LanguageIcon 
+                          fontSize="small"  
+                          sx={{ paddingBottom: ".3rem", color: (theme: Theme) => col.i18n && col.i18n[0] ? theme.palette.primary.light : theme.palette.grey[500], cursor: "pointer" }}
+                          onClick={() => { col.i18n && col.i18n[1]((prevState: boolean) => !prevState)}}
+                        />
+                      </Tooltip>
+                    }
+                    <Tooltip title={"Sort"} >
+                      <TableSortLabel active={col.field_name === searchCriteria?.by?.toLowerCase()} direction={searchCriteria?.order?.toLowerCase() as Order} onClick={handleSort(col.field_name as string)}>
+                        {col.label}
+                      </TableSortLabel>
+                    </Tooltip>
+                  </div>
                 ): (<span>{col.label}</span>)}
               </TableCell> 
 						))}
@@ -146,7 +159,7 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 						<TableRow key={"${row.name}_${row_id}"} className={classes.row}>
 							{columns.map((col: Column<T>, index: number) => (
 								<TableCell key={index} align="center">
-									{col.formatter ? col.formatter(row) : _.get(row, col.field_name)}
+									{col.formatter ? col.formatter(row) : _.get(row, col.i18n && col.i18n[0] ? `i18n_${col.field_name as string}` : col.field_name)}
 								</TableCell>
 							))}
               {true &&

@@ -20,15 +20,19 @@ const useStyles: () => ClassNameMap<string> = makeStyles((theme: Theme) => ({
 
 export interface ProductEdition {
   name: string
-  description: string
+  i18n_name?: string
+  description?: string
+  i18n_description?: string
   price: number
   store_id?: number
 }
 
 const validationSchema = yup.object({
   name: yup.string().required().min(3).max(256),
-  description: yup.string().required().min(3).max(256),
+  i18n_name: yup.string().min(3).max(256),
   price: yup.number().required().min(0),
+  description: yup.string().required().min(3).max(256),
+  i18n_description: yup.string().min(3).max(256),
 })
 
 interface Props {
@@ -50,7 +54,9 @@ export const EditProductForm = ({ product, onSubmitAction }: Props) => {
 
   const initialValues: ProductEdition = {
     name: product?.name || "",
+    i18n_name: product?.i18n_name || "",
     description: product?.description || "",
+    i18n_description: product?.i18n_description || "",
     price: product?.price || 10
   }
 
@@ -65,14 +71,20 @@ export const EditProductForm = ({ product, onSubmitAction }: Props) => {
       {(props: FormikProps<ProductEdition>) => (
         <Form className={classes.form}>
           <Grid container>
-            <Grid item xs={9} padding={1}>
+            <Grid item xs={4.5} padding={1}>
               <FormikTextField name="name" type="text" label="Name" fullWidth/>
+            </Grid>
+            <Grid item xs={4.5} padding={1}>
+              <FormikTextField name="i18n_name" type="text" label="Secondary name" fullWidth/>
             </Grid>
             <Grid item xs={3} padding={1}>
               <FormikTextField name="price" type="number" label="Price" InputProps={{startAdornment: <EuroSymbolRoundedIcon style={{fontSize: "16px"}}/>}} fullWidth/>
             </Grid>
             <Grid xs={12} padding={1}>
               <FormikTextField name="description" type="text" label="Description" fullWidth />
+            </Grid>
+            <Grid xs={12} padding={1}>
+              <FormikTextField name="i18n_description" type="text" label="Secondary description" fullWidth />
             </Grid>
           </Grid> 
           <Button type="submit" variant="contained" style={{marginTop: 16}} disabled={!props.isValid && !isSubmitting}>Submit</Button>

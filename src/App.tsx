@@ -1,11 +1,14 @@
 import React, { useEffect } from "react"
-import { CssBaseline } from "@mui/material"
+import { CssBaseline, ThemeProvider } from "@mui/material"
 import { useAppActions, useAppSelector } from "./appRedux/hooks"
 import { MainActions } from "./appRedux/types"
 import { RootState } from "./appRedux/store"
 import { BrowserRouter as Router } from "react-router-dom"
 import { Layout } from "./layout/Layout"
 import { ModalProvider } from "./shared/Modal/ModalProvider"
+import { theme } from "./config/theme"
+import { LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 
 const App = (): JSX.Element => {
 	const actions: MainActions = useAppActions()
@@ -13,13 +16,17 @@ const App = (): JSX.Element => {
 	const { product } = useAppSelector((state: RootState) => state)
 	return (
 		<>
-      <ModalProvider>
-        <Router>
-          {product.is_loading && <div>it is loading</div>}
-          <CssBaseline />
-          <Layout></Layout>
-        </Router>
-      </ModalProvider>
+      <ThemeProvider theme={theme}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ModalProvider>
+            <Router>
+              {product.is_loading && <div>it is loading</div>}
+              <CssBaseline />
+              <Layout></Layout>
+            </Router>
+          </ModalProvider>
+        </LocalizationProvider>
+      </ThemeProvider>
 		</>
 	)
 }

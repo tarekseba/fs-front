@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react"
-import { FormControlLabel, Grid, Paper, Radio, Typography } from "@mui/material"
+import { Checkbox, FormControlLabel, FormGroup, Grid, Paper, TextField, TextFieldProps, Theme, Typography } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { Store } from "../../appRedux/slices/storeSlice"
 import { RootState } from "../../appRedux/store"
@@ -8,8 +8,21 @@ import { Column } from "../../shared/utils/types"
 import { renderStoresCellActions, StoreCreation } from "./table/renderStoresCellActions"
 import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { StoreCreationForm } from "./table/modalContents/StoreCreationForm"
-import { defaultSearchCriteria, ReactState } from "../../utils/types"
+import { ReactState } from "../../utils/types"
+import { DatePicker } from "@mui/x-date-pickers"
+import dayjs, { Dayjs } from "dayjs"
 import * as _ from "lodash"
+import { makeStyles, ClassNameMap } from "@mui/styles"
+
+const useStyles: () => ClassNameMap<string> = makeStyles((_theme: Theme) => ({
+  filtersPaper: {
+    display: "flex",
+    flexDirection: "column",
+    gap: ".5rem",
+    padding: "1rem",
+    justifyContent: "center",
+  }
+}))
 
 /* eslint-disable-next-line */
 const statusFormatter = (store: Store): ReactNode => {
@@ -22,10 +35,10 @@ const dateFormatter = (row: Store) => (
 )
 
 const columns_temp: Column<Store>[] = [
-  { label: "Id", field_name: "id", can_sort: false },
-  { label: "Nom", field_name: "name", can_sort: false },
+  /* { label: "Id", field_name: "id", can_sort: false }, */
+  { label: "Nom", field_name: "name", can_sort: true },
   { label: "Status", field_name: "store_id", can_sort: true, formatter: statusFormatter },
-  { label: "Date de creation", field_name: "created_at", can_sort: false, formatter: dateFormatter }
+  { label: "Date de creation", field_name: "created_at", can_sort: true, formatter: dateFormatter }
 ]
 
 const defaultInitialValues: StoreCreation = {
@@ -47,6 +60,10 @@ export const Stores = (): JSX.Element => {
   const { stores, searchCriteria } = useAppSelector((state: RootState) => state.store) 
   const { toggleModal }: ModalOptions = useModal()
   const [ open, setOpen ]: ReactState<boolean> = useState(false)
+  const [ before, setBefore ]: ReactState<Date | undefined> = useState<Date | undefined>(undefined)
+  const [ after, setAfter ]: ReactState<Date | undefined> = useState<Date | undefined>(undefined)
+
+  const styles: ClassNameMap<string> = useStyles()
 
   const headerAction = () =>  {
     toggleModal({
@@ -57,22 +74,59 @@ export const Stores = (): JSX.Element => {
         />
     })
   }
+
   const onIsOpenChange = () => {
     actions.store.edit.criteria({...searchCriteria, in_holiday: open ? undefined : false })
     setOpen((state: boolean) => !state)
   }
 
-  useEffect(() => {
-    actions.store.get.stores(searchCriteria) 
-  }, [])
+  const onBeforeChange = (value: Dayjs | null) => {
+    if (value?.isValid()) {
+      setBefore(value.toDate())
+    } else if (before) {
+      setBefore(undefined)
+    }
+  }
 
-  return (<Grid container justifyContent={"space-between"} style={{padding: "1rem"}}>
-    <Grid item sm={4}  md={3.5}>
-      <Paper style={{marginRight: ".5rem"}}>
-        <FormControlLabel control={<input type={"checkbox"}/>} label={"Open"} value={searchCriteria.in_holiday} checked={open} onClick={onIsOpenChange}></FormControlLabel>
-      </Paper>
+  const onAfterChange = (value: Dayjs | null) => {
+    if (value?.isValid()) {
+      setAfter(value.toDate())
+    } else if (after) {
+      setAfter(undefined)
+    }
+  }
+
+  useEffect(() => {
+    actions.store.get.stores({ ...searchCriteria, before: before, after: after }) 
+  }, [before, after])
+
+  return (<Grid container justifyContent={"space-between"} >
+    <Grid item sm={4} md={3} lg={2}>
+      <div style={{marginRight: ".5rem"}}>
+        <Paper className={styles.filtersPaper}>
+          <FormGroup style={{marginLeft: "-1rem"}}>
+            <FormControlLabel style={{marginLeft: "0rem"}} control={<Checkbox />} label={"Open"} value={searchCriteria.in_holiday} checked={open} onClick={onIsOpenChange}></FormControlLabel>
+          </FormGroup>
+          <div>
+            <DatePicker 
+              onChange={onBeforeChange} 
+              value={before} 
+              label={"Before"}
+              renderInput={(props: TextFieldProps) => (<TextField style={{width: "auto"}} variant="standard" {...props}/>)}
+            />
+          </div>
+          <div>
+            <DatePicker 
+              onChange={onAfterChange} 
+              value={after} 
+              label={"After"}
+              renderInput={(props: TextFieldProps) => (<TextField variant="standard" {...props}/>)}
+            />
+          </div>
+        </Paper>
+      </div>
     </Grid>
-    <Grid item sm={8}  md={8.5} style={{backgroundColor: "yellow"}}>
+    <Grid item sm={7} md={8} lg={9.5}>
       <Datatable<Store>
         loading={false}
         data={stores}

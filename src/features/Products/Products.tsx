@@ -1,10 +1,10 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { FormControlLabel, Grid, Paper, Radio } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { Product } from "../../appRedux/slices/productSlice"
 import { RootState } from "../../appRedux/store"
 import { Datatable } from "../../shared/Datatable"
-import { Column } from "../../shared/utils/types"
+import { Column, ReactState } from "../../shared/utils/types"
 import { EditProductForm } from "./table/modalContents/EditProductForm"
 import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { renderProductsCellActions } from "./table/renderProductsCellActions"
@@ -21,19 +21,13 @@ const dateFormatter = (row: Product) => (
   new Date(row.created_at).toLocaleString().replace(",", " -")
 )
 
-const columns_temp: Column<Product>[] = [
-	/* { label: "Id", field_name: "id", can_sort:  }, */
-	{ label: "Nom", field_name: "name", can_sort: true },
-  { label: "Price", field_name: "price", can_sort: true, formatter: priceFormatter },
-  { label: "description", field_name: "description", can_sort: true },
-  { label: "Store", field_name: "store_id", can_sort: false },
-	{ label: "Date de creation", field_name: "created_at", can_sort: true, formatter: dateFormatter }
-]
 
 export const Products = () => {
   const actions = useAppActions()
 	const { products, searchCriteria } = useAppSelector((state: RootState) => state.product) 
   const { toggleModal }: ModalOptions = useModal()
+  const i18nNameState: ReactState<boolean> = useState<boolean>(false)
+  const i18nDescriptionState: ReactState<boolean> = useState<boolean>(false)
 
   const headerAction = () =>  {
     toggleModal({
@@ -43,6 +37,15 @@ export const Products = () => {
         />
     })
   }
+
+  const columns_temp: Column<Product>[] = [
+    /* { label: "Id", field_name: "id", can_sort:  }, */
+    { label: "Nom", field_name: "name", can_sort: true, i18n: i18nNameState },
+    { label: "Price", field_name: "price", can_sort: true, formatter: priceFormatter },
+    { label: "Description", field_name: "description", can_sort: true, i18n: i18nDescriptionState },
+    { label: "Store", field_name: "store_id", can_sort: false },
+    { label: "Date de creation", field_name: "created_at", can_sort: true, formatter: dateFormatter }
+  ]
 
 	useEffect(() => {
 		actions.product.get.products(searchCriteria) 

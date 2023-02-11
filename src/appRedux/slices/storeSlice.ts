@@ -7,6 +7,8 @@ import { Product } from "./productSlice"
 
 export interface StoreCriteria extends SearchCriteria {
   in_holiday?: boolean
+  before?: Date
+  after?: Date
 }
 
 export interface Worktime {

@@ -16,8 +16,10 @@ export interface Product {
   id: number
   store_id?: number
   name: string
+  i18n_name?: string,
   price: number
   description?: string
+  i18n_description?: string,
   categories?: Category[]
   created_at: Date
 }

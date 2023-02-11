@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import { routes } from "../config/routes"
 
 export const Page = (): JSX.Element => {
-	return <main>
+	return <main style={{padding: "3rem 1rem 1rem"}}>
 		<Toolbar/>
 		<Routes>
 			{routes.map(({path, element: Component}, index) => (
