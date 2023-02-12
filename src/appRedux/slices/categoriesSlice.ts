@@ -3,7 +3,6 @@ import { actionTypes } from "../../core"
 import { ApiPaginatedSearchResult, ApiSearchResult, defaultSearchCriteria, SearchCriteria } from "../../utils/types"
 import { AppPayloadAction } from "../types"
 import { categoryActions } from "../actions/categoriesActions"
-import { TypedActionCreator } from "@reduxjs/toolkit/dist/mapBuilders"
 
 export interface Category {
   id: number
@@ -59,6 +58,8 @@ const categorySlice = createSlice({
         action.asyncDispatch(categoryActions.get.categories({ ...action.payload }))
         return { ...state, searchCriteria: { ...action.payload } }
       })
+      .addCase("RESET_CATEGORY_FIELD" as string, (state: CategoryState, action: AppPayloadAction<keyof Category>) => ({ ...state, [action.payload]: undefined })
+    )
 	}
 })
 

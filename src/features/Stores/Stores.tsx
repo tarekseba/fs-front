@@ -10,7 +10,7 @@ import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 import { StoreCreationForm } from "./table/modalContents/StoreCreationForm"
 import { ReactState } from "../../utils/types"
 import { DatePicker } from "@mui/x-date-pickers"
-import dayjs, { Dayjs } from "dayjs"
+import { Dayjs } from "dayjs"
 import * as _ from "lodash"
 import { makeStyles, ClassNameMap } from "@mui/styles"
 
@@ -100,45 +100,45 @@ export const Stores = (): JSX.Element => {
     actions.store.get.stores({ ...searchCriteria, before: before, after: after }) 
   }, [before, after])
 
-  return (<Grid container justifyContent={"space-between"} >
-    <Grid item sm={4} md={3} lg={2}>
-      <div style={{marginRight: ".5rem"}}>
-        <Paper className={styles.filtersPaper}>
-          <FormGroup style={{marginLeft: "-1rem"}}>
-            <FormControlLabel style={{marginLeft: "0rem"}} control={<Checkbox />} label={"Open"} value={searchCriteria.in_holiday} checked={open} onClick={onIsOpenChange}></FormControlLabel>
-          </FormGroup>
-          <div>
-            <DatePicker 
-              onChange={onBeforeChange} 
-              value={before} 
-              label={"Before"}
-              renderInput={(props: TextFieldProps) => (<TextField style={{width: "auto"}} variant="standard" {...props}/>)}
-            />
-          </div>
-          <div>
-            <DatePicker 
-              onChange={onAfterChange} 
-              value={after} 
-              label={"After"}
-              renderInput={(props: TextFieldProps) => (<TextField variant="standard" {...props}/>)}
-            />
-          </div>
-        </Paper>
-      </div>
+  return (
+    <Grid container justifyContent={"space-between"} >
+      <Grid item sm={4} md={3} lg={2}>
+        <div style={{marginRight: ".5rem"}}>
+          <Paper className={styles.filtersPaper}>
+            <FormGroup style={{marginLeft: "-1rem"}}>
+              <FormControlLabel style={{marginLeft: "0rem"}} control={<Checkbox />} label={"Open"} value={searchCriteria.in_holiday} checked={open} onClick={onIsOpenChange}></FormControlLabel>
+            </FormGroup>
+            <div>
+              <DatePicker 
+                onChange={onBeforeChange} 
+                value={before} 
+                label={"Before"}
+                renderInput={(props: TextFieldProps) => (<TextField style={{width: "auto"}} variant="standard" {...props}/>)}
+              />
+            </div>
+            <div>
+              <DatePicker 
+                onChange={onAfterChange} 
+                value={after} 
+                label={"After"}
+                renderInput={(props: TextFieldProps) => (<TextField variant="standard" {...props}/>)}
+              />
+            </div>
+          </Paper>
+        </div>
+      </Grid>
+      <Grid item sm={7} md={8} lg={9.5}>
+        <Datatable<Store>
+          loading={false}
+          data={stores}
+          columns={columns_temp}
+          cellActions={renderStoresCellActions()}
+          headerAction={headerAction}
+          searchCriteria={searchCriteria}
+          updateCriteria={actions.store.edit.criteria}
+          debouncedUpdateCriteria={_.debounce(actions.store.edit.criteria, 500)}
+        />
+      </Grid>
     </Grid>
-    <Grid item sm={7} md={8} lg={9.5}>
-      <Datatable<Store>
-        loading={false}
-        data={stores}
-        columns={columns_temp}
-        cellActions={renderStoresCellActions()}
-        headerAction={headerAction}
-        searchCriteria={searchCriteria}
-        updateCriteria={actions.store.edit.criteria}
-        debouncedUpdateCriteria={_.debounce(actions.store.edit.criteria, 500)}
-      />
-    </Grid>
-    </Grid>
-  )
-}
+  )}
 

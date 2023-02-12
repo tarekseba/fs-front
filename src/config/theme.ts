@@ -32,7 +32,8 @@ export const theme: Theme = createTheme({
       styleOverrides: {
         root: {
           color: "#FBF0F0",
-          textTransform: "none"
+          textTransform: "none",
+          borderRadius: "10px"
         }
       }
     }

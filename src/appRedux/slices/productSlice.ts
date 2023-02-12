@@ -4,17 +4,22 @@ import { ApiPaginatedSearchResult, ApiSearchResult, defaultSearchCriteria, Searc
 import { productActions } from "../actions/productActions"
 import { AppPayloadAction } from "../types"
 import { Category } from "./categoriesSlice"
+import { Store } from "./storeSlice"
+
+interface ProductSearchCriteria extends SearchCriteria {
+  category_id?: number
+}
 
 export interface ProductState {
   product?: Product
   products?: ApiPaginatedSearchResult<Product>
-  searchCriteria: SearchCriteria
+  searchCriteria: ProductSearchCriteria
   is_loading: boolean
 }
 
 export interface Product {
   id: number
-  store_id?: number
+  store?: Store
   name: string
   i18n_name?: string,
   price: number
@@ -27,7 +32,7 @@ export interface Product {
 const initialState: ProductState = {
 	product: undefined,
 	products: undefined,
-  searchCriteria: defaultSearchCriteria,
+  searchCriteria: { ...defaultSearchCriteria, category_id: undefined },
 	is_loading: false
 }
 

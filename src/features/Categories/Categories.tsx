@@ -50,28 +50,33 @@ export const Categories = () => {
 	useEffect(() => {
 		actions.category.get.categories(searchCriteria) 
 	}, [])
-	return <Grid container justifyContent={"space-between"} style={{padding: "1rem"}}>
-		<Grid item sm={4}  md={3.5}><Paper style={{marginRight: ".5rem"}}>1</Paper></Grid>
-		<Grid item sm={8}  md={8.5} style={{backgroundColor: "yellow"}}>
-			{/* <Grid container columnSpacing={2} xs={12} style={{marginLeft: ".5rem", backgroundColor: "black", minHeight: "90vh"}}> */}
-			{/* 	{loading  */}
-			{/* 		? <CircularProgress/>  */}
-			{/* 		: <>{categories?.result?.map((cat: Category) => ( */}
-			{/* 			<Grid item xs={6} md={4} key={`${cat.name}_${cat.id}`}> */}
-			{/* 				<CategoryChip category={cat} isAdmin={true} isLoading={false} deleteCategory={undefined}></CategoryChip> */}
-			{/* 			</Grid> */}
-			{/* 		))}</>} */}
-			{/* </Grid> */}
-			<Datatable<Category> 
-        loading={loading}
-        data={categories}
-        columns={columns_temp}
-        cellActions={categoriesCellActions()}
-        headerAction={headerAction}
-        searchCriteria={searchCriteria}
-        updateCriteria={actions.category.edit.criteria}
-        debouncedUpdateCriteria={_.debounce(actions.category.edit.criteria, 500)}
-      />
-		</Grid>
-	</Grid>
-}
+	return (
+    <Grid container justifyContent={"space-between"} >
+      <Grid item sm={4} md={3} lg={2}>
+        <Paper style={{marginRight: ".5rem"}}>
+          1
+        </Paper>
+      </Grid>
+      <Grid item sm={7} md={8} lg={9.5}>
+        {/* <Grid container columnSpacing={2} xs={12} style={{marginLeft: ".5rem", backgroundColor: "black", minHeight: "90vh"}}> */}
+        {/* 	{loading  */}
+        {/* 		? <CircularProgress/>  */}
+        {/* 		: <>{categories?.result?.map((cat: Category) => ( */}
+        {/* 			<Grid item xs={6} md={4} key={`${cat.name}_${cat.id}`}> */}
+        {/* 				<CategoryChip category={cat} isAdmin={true} isLoading={false} deleteCategory={undefined}></CategoryChip> */}
+        {/* 			</Grid> */}
+        {/* 		))}</>} */}
+        {/* </Grid> */}
+        <Datatable<Category> 
+          loading={loading}
+          data={categories}
+          columns={columns_temp}
+          cellActions={categoriesCellActions()}
+          headerAction={headerAction}
+          searchCriteria={searchCriteria}
+          updateCriteria={actions.category.edit.criteria}
+          debouncedUpdateCriteria={_.debounce(actions.category.edit.criteria, 500)}
+        />
+      </Grid>
+    </Grid>
+  )}

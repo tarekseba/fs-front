@@ -19,6 +19,16 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
 			textOverflow : "ellipsis",
 			whiteSpace   : "nowrap",
 			background   : "white",
+      color: theme.palette.primary.light
+		},
+		"& .TableHead span.Mui-active" : {
+			height       : 44,
+			padding      : 0,
+			overflow     : "hidden",
+			textOverflow : "ellipsis",
+			whiteSpace   : "nowrap",
+			background   : "white",
+      color: theme.palette.primary.dark
 		}
 	},
 	progress : {
@@ -116,7 +126,7 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 
 	return <div className={classes.root}>
 		{loading && <LinearProgress className={classes.progress} />}
-		<TableContainer component={Paper}>
+		<TableContainer component={Paper} style={{borderRadius: "10px", overflowY: "hidden"}}>
       <div className={classes.actionHeader}>
         <div className={classes.topHeaderAction}>{headerAction && <Button variant="contained" onClick={headerAction}>ADD</Button>}</div>
         <TextField className={classes.topHeaderSearch} placeholder={"Global search"} onChange={onGlobalSearchChange}/>
@@ -125,7 +135,7 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 				sx={{ minWidth: 750 }}
 				aria-labelledby="tableTitle"
 				size={"small"}
-        style={{borderTop: "1px solid black" }}
+        style={{borderTop: "2px solid black"}}
 			>
 				<TableHead className={"TableHead"}>
 					<TableRow >
@@ -143,7 +153,11 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
                       </Tooltip>
                     }
                     <Tooltip title={"Sort"} >
-                      <TableSortLabel active={col.field_name === searchCriteria?.by?.toLowerCase()} direction={searchCriteria?.order?.toLowerCase() as Order} onClick={handleSort(col.field_name as string)}>
+                      <TableSortLabel 
+                        active={col.field_name === searchCriteria?.by?.toLowerCase()} 
+                        direction={searchCriteria?.order?.toLowerCase() as Order} 
+                        onClick={handleSort(col.field_name as string)}
+                      >
                         {col.label}
                       </TableSortLabel>
                     </Tooltip>
@@ -155,8 +169,9 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{ data?.result?.map((row: T) => (
-						<TableRow key={"${row.name}_${row_id}"} className={classes.row}>
+					{ data?.result?.map((row: T, index: number) => (
+						// eslint-disable-next-line react/jsx-key
+						<TableRow key={index} className={classes.row}>
 							{columns.map((col: Column<T>, index: number) => (
 								<TableCell key={index} align="center">
 									{col.formatter ? col.formatter(row) : _.get(row, col.i18n && col.i18n[0] ? `i18n_${col.field_name as string}` : col.field_name)}
@@ -170,7 +185,7 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 				</TableBody>
 			</Table>
       <div className={classes.tableFooter}>
-        <Pagination variant="text" shape="rounded" page={searchCriteria?.page || 1} count={data?.total_pages || 0} onChange={onPaginationChange} />
+        <Pagination variant="text" shape="rounded" page={searchCriteria?.page || 1} count={data?.total_pages || (searchCriteria?.page && searchCriteria?.page + 1)} onChange={onPaginationChange} />
         <Select defaultValue={searchCriteria?.per_page || 10} style={{height: "2rem"}} onChange={onPerPageChange}>
           {per_page_options.map((value: number) => <MenuItem key={value} value={value}>{value}</MenuItem>)}
         </Select>
