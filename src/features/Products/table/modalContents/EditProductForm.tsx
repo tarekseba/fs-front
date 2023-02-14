@@ -47,7 +47,7 @@ export const EditProductForm = ({ product, onSubmitAction }: Props) => {
 
   const submitHandler = (values: ProductEdition) => {
     setIsSubmitting(true)
-    onSubmitAction(values)
+    onSubmitAction({...values, price: parseFloat(values.price.toString())})
       .then(() => toggleModal())
       .finally(() => setIsSubmitting(false))
   }

@@ -77,6 +77,7 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
     gap: ".5rem",
     padding: "1rem 0rem 0rem",
     justifyContent: "flex-end",
+    opacity: 0.9
   }
 }))
 
@@ -84,7 +85,7 @@ export const renderInput = (params: AutocompleteRenderInputParams) => <TextField
 
 export const StoreDetails = () => {
   const actions: MainActions = useAppActions()
-  const { store, count }: StoreState = useAppSelector((state: RootState) => state.store)
+  const { store }: StoreState = useAppSelector((state: RootState) => state.store)
   const { products, searchCriteria }: ProductState = useAppSelector((state: RootState) => state.product)
   const { categories }: CategoryState = useAppSelector((state: RootState) => state.category)
   const [ loading, setIsLoading ]: ReactState<boolean> = useState<boolean>(false)
@@ -118,7 +119,6 @@ export const StoreDetails = () => {
     Promise.all([
       actions.store.get.store(storeId),
       actions.product.edit.criteria({...defaultSearchCriteria, store_id: storeId}),
-      actions.store.get.count(storeId)
     ]).then(() => setIsLoading(false))
   }, [])
 
@@ -131,7 +131,7 @@ export const StoreDetails = () => {
           </div>
           <div>
             <List style={{display: "flex", flexDirection: "row", justifyContent: "space-around", padding: "0"}}>
-            <DetailItem label={"Products"} data={count ? count : 0} Icon={InventoryRoundedIcon}/>
+            <DetailItem label={"Products"} data={store?.prod_count ? store?.prod_count : 0} Icon={InventoryRoundedIcon}/>
             <DetailItem label={"Created"} data={moment(store?.created_at).format("MMM Do, YYYY")} Icon={CakeRoundedIcon}/>
           </List>
           </div>

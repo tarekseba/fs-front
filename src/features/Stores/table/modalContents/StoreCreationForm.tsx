@@ -32,10 +32,10 @@ const validationSchema = yup.object({
   worktimes: yup.array().of(
     yup.object({
       day_id: yup.number().required(),
-      am_open: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/).required(),
-      am_close: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/).required(),
-      pm_open: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/).required(),
-      pm_close: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/).required(),
+      am_open: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/),
+      am_close: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/),
+      pm_open: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/),
+      pm_close: yup.string().matches(/^(0[0-9]|1[0-2]):[0-5][0-9]$/),
     })
   )
 })

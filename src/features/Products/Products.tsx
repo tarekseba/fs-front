@@ -52,7 +52,7 @@ export const Products = () => {
     navigate(`/store/detail/${row.store_id}`) 
   }
 
-  const storeFormatter = (row: Product) => row.store_id ? <Link onClick={goToStore(row)}>{row.store_id}</Link> : "-"
+  const storeFormatter = (row: Product) => row.store_id ? <Link onClick={goToStore(row)} style={{cursor: "pointer"}}>{row.store_id}</Link> : "-"
 
   const headerAction = () =>  {
     toggleModal({

@@ -36,6 +36,13 @@ export const theme: Theme = createTheme({
           borderRadius: "10px"
         }
       }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          opacity: 0.8
+        }
+      }
     }
   }
 })

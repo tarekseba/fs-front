@@ -49,9 +49,9 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
 			backgroundColor: "rgb(239 239 239 / 74%)",
 			transition: "all ease-in-out 250ms",
 		},
-    "& td": {
-      verticalAlign: "top"
-    }
+    /* "& td": { */
+    /*   verticalAlign: "middle" */
+    /* } */
 	},
   topHeaderAction: {
     marginTop: ".5rem",
