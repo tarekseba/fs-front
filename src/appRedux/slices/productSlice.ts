@@ -4,10 +4,10 @@ import { ApiPaginatedSearchResult, ApiSearchResult, defaultSearchCriteria, Searc
 import { productActions } from "../actions/productActions"
 import { AppPayloadAction } from "../types"
 import { Category } from "./categoriesSlice"
-import { Store } from "./storeSlice"
 
-interface ProductSearchCriteria extends SearchCriteria {
+export interface ProductSearchCriteria extends SearchCriteria {
   category_id?: number
+  store_id?: number
 }
 
 export interface ProductState {
@@ -19,7 +19,7 @@ export interface ProductState {
 
 export interface Product {
   id: number
-  store?: Store
+  store_id?: number
   name: string
   i18n_name?: string,
   price: number
@@ -32,7 +32,7 @@ export interface Product {
 const initialState: ProductState = {
 	product: undefined,
 	products: undefined,
-  searchCriteria: { ...defaultSearchCriteria, category_id: undefined },
+  searchCriteria: { ...defaultSearchCriteria, category_id: undefined, store_id: undefined },
 	is_loading: false
 }
 
@@ -42,7 +42,7 @@ const productSlice = createSlice({
 	reducers: {},
 	extraReducers: (builder: ActionReducerMapBuilder<ProductState>) => {
 		builder.addCase(actionTypes("GET_PRODUCT").success, (state: ProductState, action: AppPayloadAction<ApiSearchResult<Product>>) => {
-			return { ...state, is_loading: false, product: action.payload.result }
+			return { ...state, is_loading: false, product: action.payload.rows }
 		})
 			.addCase(actionTypes("GET_PRODUCT").pending, (state: ProductState, action: any) => {
 				return { ...state, is_loading: true }
@@ -81,6 +81,7 @@ const productSlice = createSlice({
         action.asyncDispatch(productActions.get.products({...action.payload}))
         return { ...state, searchCriteria: { ...action.payload } }
       })
+      .addCase(actionTypes("GET_STORE_PRODUCTS").success, (state: ProductState, action: AppPayloadAction<ApiPaginatedSearchResult<Product>>) => ({...state, products: action.payload}))
 	}
 })
 

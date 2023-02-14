@@ -6,7 +6,8 @@ import { StoreCriteria } from "../slices/storeSlice"
 export const storeActions = {
   get: {
     store: (id: number): any => get("GET_STORE", `/store/${id}`),
-    stores: (searchCriteria: StoreCriteria): any => get("GET_STORES", "/store", searchCriteria)
+    stores: (searchCriteria: StoreCriteria): any => get("GET_STORES", "/store", searchCriteria),
+    count: (storeId: number): any => get("GET_STORES_PROD_COUNT", `/store/${storeId}/count`)
   },
   create: {
     store: (store: StoreCreation): any => post("CREATE_STORE", "/store", store)

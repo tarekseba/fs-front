@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useEffect, useState } from "react"
-import { Autocomplete, AutocompleteRenderInputParams, Box, Grid, Link, Paper, Radio, TextField, Theme } from "@mui/material"
+import { Autocomplete, AutocompleteRenderInputParams, Box, Button, Grid, Link, Paper, Radio, TextField, Theme } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
-import { Product } from "../../appRedux/slices/productSlice"
+import { Product, ProductSearchCriteria } from "../../appRedux/slices/productSlice"
 import { RootState } from "../../appRedux/store"
 import { Datatable } from "../../shared/Datatable"
 import { Column, ReactState } from "../../shared/utils/types"
@@ -13,6 +13,7 @@ import * as _ from "lodash"
 import { AutocompleteData, defaultSearchCriteria } from "../../utils/types"
 import { Category } from "../../appRedux/slices/categoriesSlice"
 import { ClassNameMap, makeStyles } from "@mui/styles"
+import { NavigateFunction, useNavigate } from "react-router-dom"
 
 const useStyles: () => ClassNameMap<string> = makeStyles((_theme: Theme) => ({
   filtersPaper: {
@@ -24,28 +25,33 @@ const useStyles: () => ClassNameMap<string> = makeStyles((_theme: Theme) => ({
   }
 }))
 
-const priceFormatter = (row: Product) => (
+export const priceFormatter = (row: Product) => (
   <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", color: (theme: Theme) => theme.palette.primary.dark}}>
     {row.price} <EuroSymbolRoundedIcon style={{ fontSize: "16px" }}/>
   </Box>
 )
 
-const dateFormatter = (row: Product) => (
+export const dateFormatter = (row: Product) => (
   new Date(row.created_at).toLocaleString().replace(",", " -")
 )
 
-const storeFormatter = (row: Product) => row.store ? <Link onClick={() => alert("hello")}>{row.store.name}</Link> : "-"
 
 export const Products = () => {
   const actions = useAppActions()
 	const { products, searchCriteria } = useAppSelector((state: RootState) => state.product) 
-	const { categories, searchCriteria: catSearchCriteria } = useAppSelector((state: RootState) => state.category) 
+	const { categories } = useAppSelector((state: RootState) => state.category) 
   const { toggleModal }: ModalOptions = useModal()
-  const [ selected, setSelected ]: ReactState<any> = useState(undefined)
   const i18nNameState: ReactState<boolean> = useState<boolean>(false)
   const i18nDescriptionState: ReactState<boolean> = useState<boolean>(false)
+  const navigate: NavigateFunction = useNavigate()
 
   const styles: ClassNameMap<string> = useStyles()
+
+  const goToStore = (row: Product) => () => { 
+    navigate(`/store/detail/${row.store_id}`) 
+  }
+
+  const storeFormatter = (row: Product) => row.store_id ? <Link component={Button} onClick={goToStore(row)}>{row.store_id}</Link> : "-"
 
   const headerAction = () =>  {
     toggleModal({
@@ -57,7 +63,6 @@ export const Products = () => {
   }
 
   const selectHandler = (_event: SyntheticEvent, value: any) => {
-    setSelected(value?.value)
     actions.product.edit.criteria({...defaultSearchCriteria, category_id: value?.value})
   }
 
@@ -65,7 +70,7 @@ export const Products = () => {
     actions.category.get.categories({...defaultSearchCriteria, name: value})
   }
 
-  const renderInput = (params: AutocompleteRenderInputParams) => <TextField variant="standard" style={{maxWidth: "auto"}} {...params} label={"Categories"}/>
+  const renderInput = (params: AutocompleteRenderInputParams) => <TextField variant="standard" style={{maxWidth: "auto"}} {...params} label={"Category"}/>
 
   const options: AutocompleteData<number>[] = categories && categories.result ? categories.result.map((category: Category) => ({ value: category.id, label: category.name } as AutocompleteData<number>)) : []
 
@@ -74,12 +79,12 @@ export const Products = () => {
     { label: "Nom", field_name: "name", can_sort: true, i18n: i18nNameState },
     { label: "Price", field_name: "price", can_sort: true, formatter: priceFormatter },
     { label: "Description", field_name: "description", can_sort: true, i18n: i18nDescriptionState },
-    { label: "Store", field_name: "store.name", can_sort: false, formatter: storeFormatter },
+    { label: "Store", field_name: "store_id", can_sort: false, formatter: storeFormatter },
     { label: "Creation date", field_name: "created_at", can_sort: true, formatter: dateFormatter }
   ]
 
 	useEffect(() => {
-		actions.product.get.products(searchCriteria) 
+		actions.product.edit.criteria(defaultSearchCriteria) 
     actions.category.resetField("categories")
 	}, [])
 
@@ -98,7 +103,7 @@ export const Products = () => {
         </div>
       </Grid>
       <Grid item sm={7} md={8} lg={9.5}>
-        <Datatable<Product>
+        <Datatable<Product, ProductSearchCriteria>
           loading={false}
           data={products}
           columns={columns_temp}

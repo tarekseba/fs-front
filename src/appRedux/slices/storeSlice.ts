@@ -34,6 +34,7 @@ export interface StoreState {
   store?: Store
   stores?: ApiPaginatedSearchResult<Store>
   searchCriteria: StoreCriteria
+  count?: number
   loading: boolean
 }
 
@@ -50,10 +51,13 @@ const storeSlice = createSlice({
 	reducers: {},
 	extraReducers: (builder: ActionReducerMapBuilder<StoreState>) => {
 		builder.addCase(actionTypes("GET_STORE").success, (state: StoreState, action: AppPayloadAction<ApiSearchResult<Store>>) => {
-			return { ...state, loading: false, store: action.payload.result }
+			return { ...state, loading: false, store: action.payload.rows }
 		})
       .addCase(actionTypes("GET_STORES").success, (state: StoreState, action: AppPayloadAction<ApiPaginatedSearchResult<Store>>) => {
         return {...state, stores: action.payload}
+      })
+      .addCase(actionTypes("GET_STORES_PROD_COUNT").success, (state: StoreState, action: AppPayloadAction<ApiSearchResult<{count: number}>>) => {
+        return {...state, count: action.payload.rows?.count}
       })
       .addCase(actionTypes("CREATE_STORE").success, (state: StoreState, action: AppPayloadAction<any>) => {
         action.asyncDispatch(storeActions.get.stores(current(state.searchCriteria)))
@@ -64,7 +68,6 @@ const storeSlice = createSlice({
         return state
       })
       .addCase("UPDATE_STORE_CRITERIA" as string, (state: StoreState, action: AppPayloadAction<SearchCriteria>) => {
-        console.log("Update store criteria")
         action.asyncDispatch(storeActions.get.stores({ ...action.payload }))
         return { ...state, searchCriteria: { ...action.payload } }
       })

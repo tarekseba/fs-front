@@ -1,7 +1,7 @@
 export type OrderType = "ASC" | "DESC"
 
 export interface ApiSearchResult<T> {
-  result?: T
+  rows?: T
   error?: string
 }
 
@@ -41,3 +41,21 @@ export interface AutocompleteData<T = string> {
   label: string
 }
 
+export interface Id {
+  id: number
+}
+
+export const DaysOfWeek: Record<number, string> = {
+  [1]: "Monday",
+  [2]: "Tuesday",
+  [3]: "Wednesday",
+  [4]: "Thursday",
+  [5]: "Friday",
+  [6]: "Saturday",
+  [7]: "Sunday"
+}
+
+export enum TimeOfDay {
+  AM = "AM",
+  PM = "PM"
+}

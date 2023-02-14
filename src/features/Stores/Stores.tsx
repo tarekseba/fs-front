@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react"
 import { Checkbox, FormControlLabel, FormGroup, Grid, Paper, TextField, TextFieldProps, Theme, Typography } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
-import { Store } from "../../appRedux/slices/storeSlice"
+import { Store, StoreCriteria } from "../../appRedux/slices/storeSlice"
 import { RootState } from "../../appRedux/store"
 import { Datatable } from "../../shared/Datatable"
 import { Column } from "../../shared/utils/types"
@@ -37,8 +37,8 @@ const dateFormatter = (row: Store) => (
 const columns_temp: Column<Store>[] = [
   /* { label: "Id", field_name: "id", can_sort: false }, */
   { label: "Nom", field_name: "name", can_sort: true },
-  { label: "Status", field_name: "store_id", can_sort: true, formatter: statusFormatter },
-  { label: "Date de creation", field_name: "created_at", can_sort: true, formatter: dateFormatter }
+  { label: "Status", field_name: "store_id", can_sort: false, formatter: statusFormatter },
+  { label: "Creation Date", field_name: "created_at", can_sort: true, formatter: dateFormatter }
 ]
 
 const defaultInitialValues: StoreCreation = {
@@ -128,7 +128,7 @@ export const Stores = (): JSX.Element => {
         </div>
       </Grid>
       <Grid item sm={7} md={8} lg={9.5}>
-        <Datatable<Store>
+        <Datatable<Store, StoreCriteria>
           loading={false}
           data={stores}
           columns={columns_temp}

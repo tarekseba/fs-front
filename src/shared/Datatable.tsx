@@ -84,17 +84,17 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
 
 type Order = "asc" | "desc"
 
-interface DatatableProps<T> {
+interface DatatableProps<T, E extends SearchCriteria> {
   loading?: boolean
   data?: ApiPaginatedSearchResult<T>
   columns: Array<Column<T>>
   cellActions: (row: T) => JSX.Element
   headerAction?: () => void
-  searchCriteria: SearchCriteria
-  updateCriteria: (criteria: SearchCriteria) => any
-  debouncedUpdateCriteria?: (criteria: SearchCriteria) => any
+  searchCriteria: E 
+  updateCriteria: (criteria: E) => any
+  debouncedUpdateCriteria?: (criteria: E) => any
 }
-export const Datatable = <T extends object>({ columns, data, loading = false, cellActions, headerAction, searchCriteria, updateCriteria, debouncedUpdateCriteria }: DatatableProps<T>): JSX.Element => {
+export const Datatable = <T extends object, E extends SearchCriteria = SearchCriteria>({ columns, data, loading = false, cellActions, headerAction, searchCriteria, updateCriteria, debouncedUpdateCriteria }: DatatableProps<T, E>): JSX.Element => {
 	const classes = useStyles()
 
 
@@ -126,16 +126,15 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 
 	return <div className={classes.root}>
 		{loading && <LinearProgress className={classes.progress} />}
-		<TableContainer component={Paper} style={{borderRadius: "10px", overflowY: "hidden"}}>
+		<TableContainer component={Paper} sx={{borderRadius: "15px", overflowY: "hidden", border: (theme: Theme) => `2px solid ${theme.palette.primary.light}`}}>
       <div className={classes.actionHeader}>
         <div className={classes.topHeaderAction}>{headerAction && <Button variant="contained" onClick={headerAction}>ADD</Button>}</div>
         <TextField className={classes.topHeaderSearch} placeholder={"Global search"} onChange={onGlobalSearchChange}/>
       </div>
 			<Table
-				sx={{ minWidth: 750 }}
 				aria-labelledby="tableTitle"
 				size={"small"}
-        style={{borderTop: "2px solid black"}}
+        sx={{ minWidth: 750, borderTop: (theme: Theme) => `1px solid ${theme.palette.primary.light}`}}
 			>
 				<TableHead className={"TableHead"}>
 					<TableRow >
@@ -185,7 +184,7 @@ export const Datatable = <T extends object>({ columns, data, loading = false, ce
 				</TableBody>
 			</Table>
       <div className={classes.tableFooter}>
-        <Pagination variant="text" shape="rounded" page={searchCriteria?.page || 1} count={data?.total_pages || (searchCriteria?.page && searchCriteria?.page + 1)} onChange={onPaginationChange} />
+        <Pagination variant="text" shape="rounded" page={searchCriteria?.page || 1} count={data?.total_pages || 0} onChange={onPaginationChange} />
         <Select defaultValue={searchCriteria?.per_page || 10} style={{height: "2rem"}} onChange={onPerPageChange}>
           {per_page_options.map((value: number) => <MenuItem key={value} value={value}>{value}</MenuItem>)}
         </Select>

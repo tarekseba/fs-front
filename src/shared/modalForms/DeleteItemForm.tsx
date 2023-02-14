@@ -13,7 +13,6 @@ export const DeleteItemForm = <T extends { id: number }>({ item, deleteAction }:
   const { toggleModal }: ModalOptions = useModal()
   const submitHandler = () => {
     setIsSubmitting(true)
-    console.log("deleting")
     deleteAction(item.id)
       .then(() => toggleModal())
       .finally(() => setIsSubmitting(false))

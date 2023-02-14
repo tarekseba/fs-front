@@ -38,7 +38,6 @@ const ProductsCellActions = ({ product: item }: { product: Product }) => {
   }
 
   useEffect(() => {
-    console.log("Useeffect")
     setDynamicProps(item)
   }, [ item ])
 

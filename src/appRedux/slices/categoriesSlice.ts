@@ -45,12 +45,10 @@ const categorySlice = createSlice({
         return state
       })
       .addCase(actionTypes("EDIT_CATEGORY").success, (state: CategoryState, action: AppPayloadAction<any>) => {
-        console.log(action.payload)
         action.asyncDispatch(categoryActions.get.categories(current(state.searchCriteria)))
         return state
       })
       .addCase(actionTypes("DELETE_CATEGORY").success, (state: CategoryState, action: AppPayloadAction<any>) => {
-        console.log(current(state.searchCriteria))
         action.asyncDispatch(categoryActions.get.categories(current(state.searchCriteria)))
         return state
       })
