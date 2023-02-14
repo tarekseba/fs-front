@@ -11,12 +11,11 @@ import { AssignProductForm } from "./modalContents/AssignProductForm"
 import { RootState } from "../../../appRedux/store"
 import { StoreState } from "../../../appRedux/slices"
 import * as _ from "lodash"
-import { defaultSearchCriteria } from "../../../utils/types"
 import { CategoryState } from "../../../appRedux/slices/categoriesSlice"
 import { ProductDetails } from "./modalContents/ProductDetails"
 
 /* eslint-disable-next-line */
-export const renderProductsCellActions = (actions: any = undefined) => (row: Product): JSX.Element => {
+export const renderProductsCellActions = (actions: any = undefined ) => (row: Product): JSX.Element => {
   return (
 		<ProductsCellActions product={row}/>
 	)

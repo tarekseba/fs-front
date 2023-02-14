@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useEffect, useState } from "react"
-import { Autocomplete, AutocompleteRenderInputParams, Box, Button, Grid, Link, Paper, Radio, TextField, Theme } from "@mui/material"
+import { Autocomplete, AutocompleteRenderInputParams, Box, Button, Grid, Link, Paper, TextField, Theme } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { Product, ProductSearchCriteria } from "../../appRedux/slices/productSlice"
 import { RootState } from "../../appRedux/store"
@@ -35,6 +35,7 @@ export const dateFormatter = (row: Product) => (
   new Date(row.created_at).toLocaleString().replace(",", " -")
 )
 
+export const renderInput = (params: AutocompleteRenderInputParams) => <TextField variant="standard" style={{maxWidth: "auto", minWidth: "15rem"}} {...params} label={"Category"}/>
 
 export const Products = () => {
   const actions = useAppActions()
@@ -63,14 +64,12 @@ export const Products = () => {
   }
 
   const selectHandler = (_event: SyntheticEvent, value: any) => {
-    actions.product.edit.criteria({...defaultSearchCriteria, category_id: value?.value})
+    actions.product.edit.criteria({...searchCriteria, category_id: value?.value})
   }
 
   const handleChange = (_e: SyntheticEvent, value: string) => {
-    actions.category.get.categories({...defaultSearchCriteria, name: value})
+    actions.category.get.categories({...searchCriteria, name: value})
   }
-
-  const renderInput = (params: AutocompleteRenderInputParams) => <TextField variant="standard" style={{maxWidth: "auto"}} {...params} label={"Category"}/>
 
   const options: AutocompleteData<number>[] = categories && categories.result ? categories.result.map((category: Category) => ({ value: category.id, label: category.name } as AutocompleteData<number>)) : []
 

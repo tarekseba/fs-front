@@ -1,22 +1,23 @@
-import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Paper, Theme, Typography } from "@mui/material"
+import { Autocomplete, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Paper, Theme, Typography } from "@mui/material"
 import { ClassNameMap, makeStyles } from "@mui/styles"
-import React, { useEffect, useState } from "react"
+import React, { SyntheticEvent, useEffect, useState } from "react"
 import { Params, useParams } from "react-router-dom"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { ProductState, StoreState } from "../../appRedux/slices"
 import { Worktime } from "../../appRedux/slices/storeSlice"
 import { RootState } from "../../appRedux/store"
 import { MainActions } from "../../appRedux/types"
-import { defaultSearchCriteria, ReactState, DaysOfWeek, SearchCriteria } from "../../utils/types"
+import { defaultSearchCriteria, ReactState, DaysOfWeek, SearchCriteria, AutocompleteData } from "../../utils/types"
 import InventoryRoundedIcon from "@mui/icons-material/InventoryRounded"
 import CakeRoundedIcon from "@mui/icons-material/CakeRounded"
 import moment from "moment"
 import { Datatable } from "../../shared/Datatable"
-import { dateFormatter, priceFormatter } from "../Products/Products"
+import { dateFormatter, priceFormatter, renderInput } from "../Products/Products"
 import { Column } from "../../shared/utils/types"
 import { Product, ProductSearchCriteria } from "../../appRedux/slices/productSlice"
 import { renderProductsCellActions } from "../Products/table/renderProductsCellActions"
 import * as _ from "lodash"
+import { Category, CategoryState } from "../../appRedux/slices/categoriesSlice"
 
 const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -69,14 +70,21 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
     "& .MuiListItemText-secondary": {
       letterSpacing: "2px"
     },
+  },
+  filtersPaper: {
+    display: "flex",
+    flexDirection: "row",
+    gap: ".5rem",
+    padding: "1rem 0rem 0rem",
+    justifyContent: "flex-end",
   }
-
 }))
 
 export const StoreDetails = () => {
   const actions: MainActions = useAppActions()
   const { store, count }: StoreState = useAppSelector((state: RootState) => state.store)
   const { products, searchCriteria }: ProductState = useAppSelector((state: RootState) => state.product)
+  const { categories }: CategoryState = useAppSelector((state: RootState) => state.category)
   const [ loading, setIsLoading ]: ReactState<boolean> = useState<boolean>(false)
   const i18nNameState: ReactState<boolean> = useState<boolean>(false)
   const i18nDescriptionState: ReactState<boolean> = useState<boolean>(false)
@@ -92,6 +100,16 @@ export const StoreDetails = () => {
     { label: "Description", field_name: "description", can_sort: true, i18n: i18nDescriptionState },
     { label: "Creation date", field_name: "created_at", can_sort: true, formatter: dateFormatter }
   ]
+
+  const selectHandler = (_event: SyntheticEvent, value: any) => {
+    actions.product.edit.criteria({...searchCriteria, category_id: value?.value})
+  }
+
+  const handleChange = (_e: SyntheticEvent, value: string) => {
+    actions.category.get.categories({...searchCriteria, name: value})
+  }
+
+  const options: AutocompleteData<number>[] = categories && categories.result ? categories.result.map((category: Category) => ({ value: category.id, label: category.name } as AutocompleteData<number>)) : []
 
   useEffect(() => {
     setIsLoading(true)
@@ -152,6 +170,18 @@ export const StoreDetails = () => {
           updateCriteria={actions.product.edit.criteria} data={products} 
           debouncedUpdateCriteria={_.debounce(actions.product.edit.criteria, 500)}
         />
+        <div>
+          <div className={styles.filtersPaper}>
+            <Box component={Paper} style={{padding: ".5rem 1rem 1rem", borderRadius: "15px"}}>
+              <Autocomplete<AutocompleteData<number>>
+                renderInput={renderInput}
+                options={options}
+                onChange={selectHandler}
+                onInputChange={handleChange}
+              />
+            </Box>
+          </div>
+        </div>
       </div>
     </div>
   </Box>)
