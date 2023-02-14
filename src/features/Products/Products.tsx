@@ -35,7 +35,7 @@ export const dateFormatter = (row: Product) => (
   new Date(row.created_at).toLocaleString().replace(",", " -")
 )
 
-export const renderInput = (params: AutocompleteRenderInputParams) => <TextField variant="standard" style={{maxWidth: "auto", minWidth: "15rem"}} {...params} label={"Category"}/>
+export const renderInput = (params: AutocompleteRenderInputParams) => <TextField variant="standard" style={{maxWidth: "auto"}} {...params} label={"Category"}/>
 
 export const Products = () => {
   const actions = useAppActions()
@@ -52,7 +52,7 @@ export const Products = () => {
     navigate(`/store/detail/${row.store_id}`) 
   }
 
-  const storeFormatter = (row: Product) => row.store_id ? <Link component={Button} onClick={goToStore(row)}>{row.store_id}</Link> : "-"
+  const storeFormatter = (row: Product) => row.store_id ? <Link onClick={goToStore(row)}>{row.store_id}</Link> : "-"
 
   const headerAction = () =>  {
     toggleModal({

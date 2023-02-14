@@ -1,4 +1,4 @@
-import { Autocomplete, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Paper, Theme, Typography } from "@mui/material"
+import { Autocomplete, AutocompleteRenderInputParams, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Paper, TextField, Theme, Typography } from "@mui/material"
 import { ClassNameMap, makeStyles } from "@mui/styles"
 import React, { SyntheticEvent, useEffect, useState } from "react"
 import { Params, useParams } from "react-router-dom"
@@ -12,7 +12,7 @@ import InventoryRoundedIcon from "@mui/icons-material/InventoryRounded"
 import CakeRoundedIcon from "@mui/icons-material/CakeRounded"
 import moment from "moment"
 import { Datatable } from "../../shared/Datatable"
-import { dateFormatter, priceFormatter, renderInput } from "../Products/Products"
+import { dateFormatter, priceFormatter } from "../Products/Products"
 import { Column } from "../../shared/utils/types"
 import { Product, ProductSearchCriteria } from "../../appRedux/slices/productSlice"
 import { renderProductsCellActions } from "../Products/table/renderProductsCellActions"
@@ -79,6 +79,8 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
     justifyContent: "flex-end",
   }
 }))
+
+export const renderInput = (params: AutocompleteRenderInputParams) => <TextField variant="standard" style={{maxWidth: "auto", minWidth: "15rem"}} {...params} label={"Category"}/>
 
 export const StoreDetails = () => {
   const actions: MainActions = useAppActions()

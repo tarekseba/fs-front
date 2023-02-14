@@ -38,6 +38,7 @@ const columns_temp: Column<Store>[] = [
   /* { label: "Id", field_name: "id", can_sort: false }, */
   { label: "Nom", field_name: "name", can_sort: true },
   { label: "Status", field_name: "store_id", can_sort: false, formatter: statusFormatter },
+  { label: "Products", field_name: "prod_count", can_sort: true },
   { label: "Creation Date", field_name: "created_at", can_sort: true, formatter: dateFormatter }
 ]
 

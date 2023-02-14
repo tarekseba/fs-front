@@ -24,6 +24,7 @@ export interface Worktime {
 export interface Store {
   id: number
   name: string
+  prod_count: number
   products: Product[]
   is_holiday: boolean
   created_at: Date
