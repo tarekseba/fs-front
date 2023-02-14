@@ -13,6 +13,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import { Dayjs } from "dayjs"
 import * as _ from "lodash"
 import { makeStyles, ClassNameMap } from "@mui/styles"
+import { NavigateFunction, useNavigate } from "react-router"
 
 const useStyles: () => ClassNameMap<string> = makeStyles((_theme: Theme) => ({
   filtersPaper: {
@@ -64,7 +65,13 @@ export const Stores = (): JSX.Element => {
   const [ before, setBefore ]: ReactState<Date | undefined> = useState<Date | undefined>(undefined)
   const [ after, setAfter ]: ReactState<Date | undefined> = useState<Date | undefined>(undefined)
 
+  const navigate: NavigateFunction = useNavigate()
+
   const styles: ClassNameMap<string> = useStyles()
+
+  const goToStore = (row: Store) => () => { 
+    navigate(`/store/detail/${row.id}`) 
+  }
 
   const headerAction = () =>  {
     toggleModal({

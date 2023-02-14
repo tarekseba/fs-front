@@ -1,12 +1,11 @@
 import React from "react"
-import { useAppActions, useAppSelector } from "../../../appRedux/hooks"
-import { CategoryState } from "../../../appRedux/slices/categoriesSlice"
-import { Store, StoreState, Worktime } from "../../../appRedux/slices/storeSlice"
-import { RootState } from "../../../appRedux/store"
+import { NavigateFunction, useNavigate } from "react-router"
+import { useAppActions } from "../../../appRedux/hooks"
+import { Store, Worktime } from "../../../appRedux/slices/storeSlice"
 import { MainActions } from "../../../appRedux/types"
 import { ActionMenu } from "../../../shared/ActionMenu"
 import { ModalParams } from "../../../shared/Modal/Modal"
-import { ModalOptions, useModal } from "../../../shared/Modal/ModalProvider"
+import { useModal } from "../../../shared/Modal/ModalProvider"
 import { EditProductForm, ProductEdition } from "../../Products/table/modalContents/EditProductForm"
 import { StoreCreationForm } from "./modalContents/StoreCreationForm"
 
@@ -41,10 +40,13 @@ export const renderStoresCellActions = () => (row: Store): JSX.Element => {
 
 const StoresCellActions = ({ store: item }: Props): JSX.Element => {
   const { toggleModal } = useModal()
-  const { product, store, category }: MainActions = useAppActions()
-  const { stores }: StoreState = useAppSelector((state: RootState) => state.store)
-  const { categories }: CategoryState = useAppSelector((state: RootState) => state.category)
-  const { setDynamicProps }: ModalOptions = useModal()
+  const { product, store }: MainActions = useAppActions()
+
+  const navigate: NavigateFunction = useNavigate()
+
+  const goToStore = () => { 
+    navigate(`/store/detail/${item.id}`) 
+  }
 
   const onAddProduct = (values: ProductEdition) => product.create.product({ ...values, store_id: item.id })
 
@@ -66,6 +68,7 @@ const StoresCellActions = ({ store: item }: Props): JSX.Element => {
   }
 
   const cellActions = [
+    {label: "Details", visible: true, onClick: goToStore}, 
     {label: "Add product", visible: true, onClick: openModal("ADD_PRODUCT")}, 
     {label: "Edit store", visible: true, onClick: openModal("EDIT_STORE")}, 
     {label: "Delete", visible: true, onClick: openModal("DELETE_PRODUCT")}
