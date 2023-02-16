@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Grid, Paper } from "@mui/material"
+import { Box, Grid, Paper } from "@mui/material"
 import { useAppActions, useAppSelector } from "../../appRedux/hooks"
 import { Category } from "../../appRedux/slices/categoriesSlice"
 import { RootState } from "../../appRedux/store"
@@ -51,12 +51,7 @@ export const Categories = () => {
 		actions.category.get.categories(searchCriteria) 
 	}, [])
 	return (
-    <Grid container justifyContent={"space-between"} >
-      <Grid item sm={4} md={3} lg={2}>
-        <Paper style={{marginRight: ".5rem"}}>
-          1
-        </Paper>
-      </Grid>
+    <Box style={{margin: "auto"}}>
       <Grid item sm={7} md={8} lg={9.5}>
         {/* <Grid container columnSpacing={2} xs={12} style={{marginLeft: ".5rem", backgroundColor: "black", minHeight: "90vh"}}> */}
         {/* 	{loading  */}
@@ -78,5 +73,5 @@ export const Categories = () => {
           debouncedUpdateCriteria={_.debounce(actions.category.edit.criteria, 500)}
         />
       </Grid>
-    </Grid>
+    </Box>
   )}

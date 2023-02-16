@@ -3,5 +3,5 @@ export interface Config {
 }
 
 export const config: Config = {
-	baseUrl: "http://localhost:8080"
+	baseUrl: "http://0.0.0.0:8080"
 }
