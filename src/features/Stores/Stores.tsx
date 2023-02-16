@@ -62,8 +62,8 @@ export const Stores = (): JSX.Element => {
   const { stores, searchCriteria } = useAppSelector((state: RootState) => state.store) 
   const { toggleModal }: ModalOptions = useModal()
   const [ open, setOpen ]: ReactState<boolean> = useState(false)
-  const [ before, setBefore ]: ReactState<Date | undefined> = useState<Date | undefined>(undefined)
-  const [ after, setAfter ]: ReactState<Date | undefined> = useState<Date | undefined>(undefined)
+  const [ before, setBefore ]: ReactState<Date | null> = useState<Date | null>(null)
+  const [ after, setAfter ]: ReactState<Date | null> = useState<Date | null>(null)
 
   const navigate: NavigateFunction = useNavigate()
 
@@ -92,7 +92,7 @@ export const Stores = (): JSX.Element => {
     if (value?.isValid()) {
       setBefore(value.toDate())
     } else if (before) {
-      setBefore(undefined)
+      setBefore(null)
     }
   }
 
@@ -100,7 +100,7 @@ export const Stores = (): JSX.Element => {
     if (value?.isValid()) {
       setAfter(value.toDate())
     } else if (after) {
-      setAfter(undefined)
+      setAfter(null)
     }
   }
 

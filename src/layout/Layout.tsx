@@ -13,8 +13,5 @@ export const Layout = (): JSX.Element => {
 		<Appbar></Appbar>
 		<Page></Page>
     <Modal />
-    <Button onClick={() => toggleModal({title: "Hello", content: (<EditCategoryForm onSubmitAction={function(values: CategoryEdition): Promise<any> {
-        throw new Error("Function not implemented.")
-    } } />)})}>Open modal</Button>
 	</>
 }

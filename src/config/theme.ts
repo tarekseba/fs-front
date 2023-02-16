@@ -3,6 +3,9 @@ import { createTheme } from "@mui/material"
 import { teal } from "@mui/material/colors"
 
 export const theme: Theme = createTheme({
+  typography: {
+    fontFamily: "Poppins"
+  },
   palette: {
     primary: {
       main: "#7743DB"
@@ -24,7 +27,7 @@ export const theme: Theme = createTheme({
           left: 0,
           right: 0,
           margin: "auto",
-          textTransform: "none"
+          /* textTransform: "none" */
         }
       }
     },
@@ -32,7 +35,7 @@ export const theme: Theme = createTheme({
       styleOverrides: {
         root: {
           color: "#FBF0F0",
-          textTransform: "none",
+          /* textTransform: "none", */
           borderRadius: "10px"
         }
       }

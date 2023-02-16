@@ -93,8 +93,10 @@ interface DatatableProps<T, E extends SearchCriteria> {
   searchCriteria: E 
   updateCriteria: (criteria: E) => any
   debouncedUpdateCriteria?: (criteria: E) => any
+  maxHeight?: string
 }
-export const Datatable = <T extends object, E extends SearchCriteria = SearchCriteria>({ columns, data, loading = false, cellActions, headerAction, searchCriteria, updateCriteria, debouncedUpdateCriteria }: DatatableProps<T, E>): JSX.Element => {
+
+export const Datatable = <T extends object, E extends SearchCriteria = SearchCriteria>({ columns, data, loading = false, cellActions, headerAction, searchCriteria, updateCriteria, debouncedUpdateCriteria, maxHeight = "70vh" }: DatatableProps<T, E>): JSX.Element => {
 	const classes = useStyles()
 
 
@@ -126,7 +128,7 @@ export const Datatable = <T extends object, E extends SearchCriteria = SearchCri
 
 	return <div className={classes.root}>
 		{loading && <LinearProgress className={classes.progress} />}
-		<TableContainer component={Paper} sx={{borderRadius: "15px", overflowY: "hidden", border: (theme: Theme) => `2px solid ${theme.palette.primary.light}`}}>
+		<TableContainer component={Paper} sx={{borderRadius: "15px", overflowY: "auto", border: (theme: Theme) => `2px solid ${theme.palette.primary.light}`, maxHeight}}>
       <div className={classes.actionHeader}>
         <div className={classes.topHeaderAction}>{headerAction && <Button variant="contained" onClick={headerAction}>ADD</Button>}</div>
         <TextField className={classes.topHeaderSearch} placeholder={"Global search"} onChange={onGlobalSearchChange}/>

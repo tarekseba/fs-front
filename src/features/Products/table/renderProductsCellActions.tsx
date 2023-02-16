@@ -108,7 +108,7 @@ const buildModalContent = (
       title: "Edit product",
       content: <EditProductForm 
           product={product}
-          onSubmitAction={editAction}
+          onSubmitAction={[editAction, undefined]}
         />
     },
     ATTACH_STORE: {

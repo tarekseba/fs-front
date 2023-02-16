@@ -37,7 +37,7 @@ const validationSchema = yup.object({
 
 interface Props {
   product?: Product
-  onSubmitAction: (values: ProductEdition) => Promise<any>
+  onSubmitAction: [(values: ProductEdition) => Promise<any>, number | undefined]
 }
 
 export const EditProductForm = ({ product, onSubmitAction }: Props) => {
@@ -47,7 +47,8 @@ export const EditProductForm = ({ product, onSubmitAction }: Props) => {
 
   const submitHandler = (values: ProductEdition) => {
     setIsSubmitting(true)
-    onSubmitAction({...values, price: parseFloat(values.price.toString())})
+    const [action, storeId] = onSubmitAction
+    action({...values, price: parseFloat(values.price.toString()), store_id: storeId})
       .then(() => toggleModal())
       .finally(() => setIsSubmitting(false))
   }

@@ -48,7 +48,7 @@ const StoresCellActions = ({ store: item }: Props): JSX.Element => {
     navigate(`/store/detail/${item.id}`) 
   }
 
-  const onAddProduct = (values: ProductEdition) => product.create.product({ ...values, store_id: item.id })
+  const onAddProduct = [product.create.product, null] as [(values: ProductEdition) => Promise<any>, any]
 
   const onEditStore = (values: Store) => store.edit.store(values.id, {
     name: values.name, 
@@ -86,7 +86,7 @@ const StoresCellActions = ({ store: item }: Props): JSX.Element => {
 const buildModalContent = (
   modalAction: string,
   store: Store,
-  onAddProduct: (values: ProductEdition) => Promise<any>,
+  onAddProduct: [(values: ProductEdition) => Promise<any>, any],
   onCreateStore: (values: Store) => Promise<any>
   /* editAction: (store: StoreEdition) => Promise<any>, */
   /* deleteAction: (storeId: number) => Promise<any>, */

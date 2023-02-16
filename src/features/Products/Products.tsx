@@ -58,7 +58,7 @@ export const Products = () => {
     toggleModal({
       title: "New product",
       content: <EditProductForm 
-          onSubmitAction={actions.product.create.product} 
+          onSubmitAction={[actions.product.create.product, undefined]} 
         />
     })
   }

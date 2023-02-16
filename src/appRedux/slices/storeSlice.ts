@@ -7,8 +7,8 @@ import { Product } from "./productSlice"
 
 export interface StoreCriteria extends SearchCriteria {
   in_holiday?: boolean
-  before?: Date
-  after?: Date
+  before: Date | null
+  after: Date | null
 }
 
 export interface Worktime {
@@ -42,7 +42,7 @@ export interface StoreState {
 const initialState: StoreState = {
 	store: undefined,
 	stores: undefined,
-  searchCriteria: { ...defaultSearchCriteria, in_holiday: undefined },
+  searchCriteria: { ...defaultSearchCriteria, in_holiday: undefined, before: null, after: null },
 	loading: false
 }
 
@@ -68,7 +68,7 @@ const storeSlice = createSlice({
         action.asyncDispatch(storeActions.get.stores(current(state.searchCriteria)))
         return state
       })
-      .addCase("UPDATE_STORE_CRITERIA" as string, (state: StoreState, action: AppPayloadAction<SearchCriteria>) => {
+      .addCase("UPDATE_STORE_CRITERIA" as string, (state: StoreState, action: AppPayloadAction<StoreCriteria>) => {
         action.asyncDispatch(storeActions.get.stores({ ...action.payload }))
         return { ...state, searchCriteria: { ...action.payload } }
       })

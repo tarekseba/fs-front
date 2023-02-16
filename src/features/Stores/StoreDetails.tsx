@@ -18,6 +18,8 @@ import { Product, ProductSearchCriteria } from "../../appRedux/slices/productSli
 import { renderProductsCellActions } from "../Products/table/renderProductsCellActions"
 import * as _ from "lodash"
 import { Category, CategoryState } from "../../appRedux/slices/categoriesSlice"
+import { EditProductForm } from "../Products/table/modalContents/EditProductForm"
+import { ModalOptions, useModal } from "../../shared/Modal/ModalProvider"
 
 const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -43,7 +45,7 @@ const useStyles: () => ClassNameMap<any> = makeStyles((theme: Theme) => ({
     display: "flex", 
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     [theme.breakpoints.down("lg")]: {
       flexDirection: "row",
       alignItems: "flex-start",
@@ -112,7 +114,18 @@ export const StoreDetails = () => {
     actions.category.get.categories({...searchCriteria, name: value})
   }
 
+  const { toggleModal }: ModalOptions = useModal()
+
   const options: AutocompleteData<number>[] = categories && categories.result ? categories.result.map((category: Category) => ({ value: category.id, label: category.name } as AutocompleteData<number>)) : []
+
+  const headerAction = () =>  {
+    toggleModal({
+      title: "New product",
+      content: <EditProductForm 
+          onSubmitAction={[actions.product.create.product, storeId]} 
+        />
+    })
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -171,6 +184,8 @@ export const StoreDetails = () => {
           searchCriteria={searchCriteria}
           updateCriteria={actions.product.edit.criteria} data={products} 
           debouncedUpdateCriteria={_.debounce(actions.product.edit.criteria, 500)}
+          maxHeight="50vh"
+          headerAction={headerAction}
         />
         <div>
           <div className={styles.filtersPaper}>
